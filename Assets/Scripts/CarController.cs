@@ -1,4 +1,5 @@
 using System;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class CarController : MonoBehaviour
@@ -6,7 +7,9 @@ public class CarController : MonoBehaviour
     private Rigidbody rb;
     [SerializeField] private float speed = 5f, finalSpeed = 15f, rotationSpeed = 50f;
     private bool isClicked;
-    [NonSerialized] public Vector3 finalPosition;
+    private Vector3 finalPosition;
+    private Vector3 startPosition;
+    private bool isReturnStart;
 
     private float curPointX, curPointY;
 
@@ -21,11 +24,17 @@ public class CarController : MonoBehaviour
     {
         Right, Left, Top, Bottom, None
     }
+
     private Direction carDirectionX = Direction.None, carDirectionY = Direction.None;
 
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
+    }
+
+    private void Start()
+    {
+        startPosition = transform.position;       
     }
 
     private void OnMouseDown()
@@ -57,9 +66,14 @@ public class CarController : MonoBehaviour
             Vector3 lookAtPos = finalPosition - transform.position;
             transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(lookAtPos), rotationSpeed * Time.deltaTime);
         }
+        else if(isReturnStart)
+        {
+            transform.position = Vector3.MoveTowards(transform.position, startPosition, finalSpeed * Time.deltaTime);
+        }
 
         if (transform.position == finalPosition)
             Destroy(gameObject);
+        else if (transform.position == startPosition) isReturnStart = false;
     }
 
     private void FixedUpdate()
@@ -72,5 +86,20 @@ public class CarController : MonoBehaviour
                 speed *= -1;
             rb.MovePosition(rb.position + whichWay * speed * Time.fixedDeltaTime);
         }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if(other.CompareTag("Car") || other.CompareTag("Barrier"))
+        {
+            isClicked = false;
+            isReturnStart = true;
+        }
+
+    }
+
+    public void SetFinalPos(Vector3 vector3)
+    {
+        finalPosition = vector3;
     }
 }
