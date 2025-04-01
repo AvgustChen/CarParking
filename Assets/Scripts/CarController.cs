@@ -1,16 +1,16 @@
 using System;
+using System.ComponentModel;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class CarController : MonoBehaviour
 {
+    public Text CountMoves;
     private Rigidbody rb;
     [SerializeField] private float speed = 5f, finalSpeed = 15f, rotationSpeed = 50f;
     private bool isClicked;
     private Vector3 finalPosition;
-    private Vector3 startPosition;
-    private bool isReturnStart;
-
     private float curPointX, curPointY;
 
     private enum Axis
@@ -25,40 +25,52 @@ public class CarController : MonoBehaviour
         Right, Left, Top, Bottom, None
     }
 
+    private static int countCars = 0;
+
     private Direction carDirectionX = Direction.None, carDirectionY = Direction.None;
 
     private void Awake()
     {
+        countCars++;
         rb = GetComponent<Rigidbody>();
-    }
-
-    private void Start()
-    {
-        startPosition = transform.position;       
     }
 
     private void OnMouseDown()
     {
-        curPointX = Input.mousePosition.x;
-        curPointY = Input.mousePosition.y;
+        if (StartGame.isGameStarted)
+        {
+            curPointX = Input.mousePosition.x;
+            curPointY = Input.mousePosition.y;
+        }
     }
 
     private void OnMouseUp()
     {
-        isClicked = true;
-        if (Input.mousePosition.x - curPointX > 0 && carAxis == Axis.horizontal)
-            carDirectionX = Direction.Right;
-        else if(Input.mousePosition.x - curPointX < 0 && carAxis == Axis.horizontal)
-            carDirectionX = Direction.Left;
+        if (StartGame.isGameStarted)
+        {
+            isClicked = true;
+            if (Input.mousePosition.x - curPointX > 0 && carAxis == Axis.horizontal)
+                carDirectionX = Direction.Right;
+            else if (Input.mousePosition.x - curPointX < 0 && carAxis == Axis.horizontal)
+                carDirectionX = Direction.Left;
 
-        if (Input.mousePosition.y - curPointY > 0 && carAxis == Axis.vertical)
-            carDirectionY = Direction.Top;
-        else if (Input.mousePosition.y - curPointY < 0 && carAxis == Axis.vertical)
-            carDirectionY = Direction.Bottom;
+            if (Input.mousePosition.y - curPointY > 0 && carAxis == Axis.vertical)
+                carDirectionY = Direction.Top;
+            else if (Input.mousePosition.y - curPointY < 0 && carAxis == Axis.vertical)
+                carDirectionY = Direction.Bottom;
+
+            CountMoves.text = (Convert.ToInt32(CountMoves.text) - 1).ToString();
+
+        }
     }
 
     private void Update()
     {
+        if (CountMoves.text == "0" && countCars > 0 && !isClicked)
+        {
+            StartGame.Instance.LoseGame();
+        }
+
         if (finalPosition != Vector3.zero)
         {
             transform.position = Vector3.MoveTowards(transform.position, finalPosition, finalSpeed * Time.deltaTime);
@@ -66,14 +78,12 @@ public class CarController : MonoBehaviour
             Vector3 lookAtPos = finalPosition - transform.position;
             transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(lookAtPos), rotationSpeed * Time.deltaTime);
         }
-        else if(isReturnStart)
-        {
-            transform.position = Vector3.MoveTowards(transform.position, startPosition, finalSpeed * Time.deltaTime);
-        }
 
         if (transform.position == finalPosition)
+        {
+            countCars--;
             Destroy(gameObject);
-        else if (transform.position == startPosition) isReturnStart = false;
+        }
     }
 
     private void FixedUpdate()
@@ -88,12 +98,23 @@ public class CarController : MonoBehaviour
         }
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerStay(Collider other)
     {
-        if(other.CompareTag("Car") || other.CompareTag("Barrier"))
+        if (other.CompareTag("Car") || other.CompareTag("Barrier"))
         {
+
+            if (carAxis == Axis.horizontal && isClicked)
+            {
+                float adding = carDirectionX == Direction.Left ? 0.5f : -0.5f;
+                transform.position = new Vector3(transform.position.x, 0, transform.position.z + adding);
+            }
+
+            if (carAxis == Axis.vertical && isClicked)
+            {
+                float adding = carDirectionY == Direction.Top ? 0.5f : -0.5f;
+                transform.position = new Vector3(transform.position.x + adding, 0, transform.position.z);
+            }
             isClicked = false;
-            isReturnStart = true;
         }
 
     }
