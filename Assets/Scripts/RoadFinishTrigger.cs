@@ -8,7 +8,8 @@ public class RoadFinishTrigger : MonoBehaviour
     {
         if(other.CompareTag("Car"))
         {
-            other.GetComponent<CarController>().SetFinalPos(finalPosition);
+            other.GetComponent<BoxCollider>().enabled = false;
+            other.GetComponent<Car>().SetFinalPos(finalPosition);
         }
     }
 }

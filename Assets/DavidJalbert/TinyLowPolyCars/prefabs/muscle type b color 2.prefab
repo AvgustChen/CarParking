@@ -196,10 +196,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 868a8fbccd3bef84d99d447b6a510d6b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 10
+  CountMoves: {fileID: 0}
+  speed: 15
   finalSpeed: 25
   rotationSpeed: 350
-  carAxis: 1
+  isActive: 0
+  isReturn: 0
 --- !u!65 &5905114494115772140
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -453,15 +455,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 400006, guid: 8205cb8f4ff677f43ad7dc6750a5b0ae, type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 400006, guid: 8205cb8f4ff677f43ad7dc6750a5b0ae, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 400006, guid: 8205cb8f4ff677f43ad7dc6750a5b0ae, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 400006, guid: 8205cb8f4ff677f43ad7dc6750a5b0ae, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
