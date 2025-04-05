@@ -10,6 +10,7 @@ public class RoadFinishTrigger : MonoBehaviour
         {
             other.GetComponent<BoxCollider>().enabled = false;
             other.GetComponent<Car>().SetFinalPos(finalPosition);
+            other.GetComponent<Car>().isActive = true;
         }
     }
 }

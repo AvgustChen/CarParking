@@ -4,18 +4,20 @@ using UnityEngine;
 public class CarsController : MonoBehaviour
 {
     public static CarsController Instance;
-    [SerializeField] public List<Car> carsList;
+    public List<Car> carsList;
     public List<Car> carSelectedList;
 
     private void Start()
     {
         Instance = this;
         carSelectedList = new List<Car>();
+
+        carsList = new List<Car>(FindObjectsOfType<Car>());
     }
 
     private void Update()
     {
-        if (carsList == null)
+        if (carsList.Count == 0)
         {
             // вызов события победы
             Debug.Log("You win");

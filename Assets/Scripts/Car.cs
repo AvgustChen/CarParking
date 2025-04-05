@@ -3,12 +3,14 @@ using UnityEngine;
 
 public class Car : MonoBehaviour
 {
+    [SerializeField] private SOColor soColor;
     private Rigidbody rb;
     [SerializeField] private float speed = 5f, finalSpeed = 15f, rotationSpeed = 50f;
 
     private Vector3 finalPosition, startPosition;
+    [SerializeField] private int numberOfSeats;
 
-    public bool isReturn, isRemoved;
+    public bool isReturn, isRemoved, isActive;
 
     private void Awake()
     {
@@ -66,7 +68,12 @@ public class Car : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Car") || other.CompareTag("Barrier"))
+        if (other.CompareTag("Car"))
+        {
+            if (!other.GetComponent<Car>().isActive)
+                isReturn = true;
+        }
+        else if (other.CompareTag("Barrier"))
         {
             isReturn = true;
         }
@@ -88,5 +95,10 @@ public class Car : MonoBehaviour
         if (finalPosition == Vector3.zero)
             return false;
         return true;
+    }
+
+    public SOColor GetSOColor()
+    {
+        return soColor;
     }
 }
