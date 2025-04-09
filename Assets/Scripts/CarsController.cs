@@ -7,11 +7,10 @@ public class CarsController : MonoBehaviour
     public List<Car> carsList;
     public List<Car> carSelectedList;
 
-    private void Start()
+    private void Awake()
     {
         Instance = this;
         carSelectedList = new List<Car>();
-
         carsList = new List<Car>(FindObjectsOfType<Car>());
     }
 
@@ -26,23 +25,21 @@ public class CarsController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (carSelectedList != null)
+        if (carSelectedList.Count > 0)
         {
-            List<Car> carsToRemove = new List<Car>();
-            foreach (Car car in carSelectedList)
+            // Удаляем автомобили, которые помечены как удаленные
+            carSelectedList.RemoveAll(car => 
             {
-                car.Move();
                 if (car.isRemoved)
-                    carsToRemove.Add(car);
-            }
-
-            foreach (Car car in carsToRemove)
-            {
-                carSelectedList.Remove(car);
-                car.isRemoved = false;
-                if (car.IsHasFinalPos())
-                    carsList.Remove(car);
-            }
+                {
+                    if (car.IsHasFinalPos())
+                        carsList.Remove(car);
+                    car.isRemoved = false;
+                    return true; // Удаляем автомобиль из carSelectedList
+                }
+                car.Move(); // Двигаем автомобиль, если он не удален
+                return false; // Не удаляем
+            });
         }
     }
 }

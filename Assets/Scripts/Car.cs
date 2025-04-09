@@ -3,17 +3,19 @@ using UnityEngine;
 
 public class Car : MonoBehaviour
 {
-    [SerializeField] private SOColor soColor;
+    [SerializeField] private string color;
     private Rigidbody rb;
     [SerializeField] private float speed = 5f, finalSpeed = 15f, rotationSpeed = 50f;
 
-    private Vector3 finalPosition, startPosition;
-    [SerializeField] private int numberOfSeats;
+    public Vector3 finalPosition, startPosition;
+    public int numberOfSeats, countPass;
 
-    public bool isReturn, isRemoved, isActive;
+    public bool isReturn, isRemoved, isActive, isParked;
+    CarUI carUI;
 
     private void Awake()
     {
+        carUI = GetComponent<CarUI>();
         startPosition = transform.position;
         rb = GetComponent<Rigidbody>();
     }
@@ -23,6 +25,8 @@ public class Car : MonoBehaviour
         if (StartGame.isGameStarted)
         {
             CarsController.Instance.carSelectedList.Add(this);
+            isActive = true;
+            carUI.StartMoveSound();
         }
     }
 
@@ -40,7 +44,7 @@ public class Car : MonoBehaviour
 
         if (finalPosition != Vector3.zero)
         {
-            transform.position = Vector3.MoveTowards(transform.position, finalPosition, finalSpeed * Time.deltaTime);
+            transform.position = Vector3.MoveTowards(transform.position, finalPosition, finalSpeed * Time.fixedDeltaTime);
 
             Vector3 lookAtPos = finalPosition - transform.position;
             transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(lookAtPos), rotationSpeed * Time.deltaTime);
@@ -54,6 +58,7 @@ public class Car : MonoBehaviour
             transform.position = Vector3.MoveTowards(transform.position, startPosition, finalSpeed * Time.deltaTime);
             if (transform.position == startPosition)
             {
+                isActive = false;
                 isRemoved = true;
                 isReturn = false;
             }
@@ -71,11 +76,10 @@ public class Car : MonoBehaviour
         if (other.CompareTag("Car"))
         {
             if (!other.GetComponent<Car>().isActive)
+            {
                 isReturn = true;
-        }
-        else if (other.CompareTag("Barrier"))
-        {
-            isReturn = true;
+                carUI.CrashSound();
+            }
         }
         else if (other.CompareTag("Finish"))
         {
@@ -97,8 +101,8 @@ public class Car : MonoBehaviour
         return true;
     }
 
-    public SOColor GetSOColor()
+    public string GetColor()
     {
-        return soColor;
+        return color;
     }
 }

@@ -2,10 +2,11 @@ using UnityEngine;
 
 public class Human : MonoBehaviour
 {
-    [SerializeField] public SOColor soColor;
+    [SerializeField] private string color;
 
-    public SOColor GetSOColor()
+    public string GetColor()
     {
-        return soColor;
+        return color;
     }
+
 }

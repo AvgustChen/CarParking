@@ -1,4 +1,5 @@
-using Unity.VisualScripting;
+using System;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -6,13 +7,21 @@ public class StartGame : MonoBehaviour
 {
     public static StartGame Instance;
     public static bool isGameStarted = false;
-    public GameObject logo, playButton, countMoves, loseText;
+    public GameObject logo, playButton, loseText;
+    public TMP_Text peopleCount;
     private bool isLoseGame = false;
 
     private void Start()
     {
         Instance = this;
+        peopleCount.text = HumansManager.Instance.humansList.Count.ToString();
     }
+
+    public void CountUpdate()
+    {
+        peopleCount.text = HumansManager.Instance.humansList.Count.ToString();
+    }
+
     public void PlayGame()
     {
         if (!isLoseGame)
@@ -20,7 +29,6 @@ public class StartGame : MonoBehaviour
             isGameStarted = true;
             logo.SetActive(false);
             playButton.SetActive(false);
-            countMoves.SetActive(true);
         }
         else
         {
@@ -34,7 +42,6 @@ public class StartGame : MonoBehaviour
         isGameStarted = false;
         logo.SetActive(true);
         playButton.SetActive(true);
-        countMoves.SetActive(false);
         loseText.SetActive(true);
     }
 }
