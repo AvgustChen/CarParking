@@ -47,7 +47,10 @@ public class Car : MonoBehaviour
             transform.position = Vector3.MoveTowards(transform.position, finalPosition, finalSpeed * Time.fixedDeltaTime);
 
             Vector3 lookAtPos = finalPosition - transform.position;
-            transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(lookAtPos), rotationSpeed * Time.deltaTime);
+            // if (lookAtPos == Vector3.zero && isParked) 
+            // finalPosition = 
+           transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(lookAtPos), rotationSpeed * Time.deltaTime);
+           //transform.forward = Vector3.Slerp(transform.forward, finalPosition, Time.deltaTime * rotationSpeed);
         }
     }
 

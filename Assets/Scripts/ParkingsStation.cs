@@ -1,6 +1,5 @@
 using System;
 using DG.Tweening;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class ParkingsStation : MonoBehaviour
@@ -9,7 +8,7 @@ public class ParkingsStation : MonoBehaviour
     public static ParkingsStation Instance;
     public Transform[] parkings;
     public Vector3 finalPos;
-    private bool isCanSeat;
+    public bool isCanSeat;
     private float timerToSeat;
 
     private void Awake()
@@ -45,36 +44,19 @@ public class ParkingsStation : MonoBehaviour
     private void SeatHumanInCar(Human human, Car car)
     {
         isCanSeat = false; // Запретить посадку до завершения текущей
-        human.gameObject.transform.LookAt(car.transform.position);
-        human.transform.SetParent(car.transform);
-        car.countPass++;
-
+        //human.gameObject.transform.LookAt(car.transform.position);
+        //human.transform.SetParent(car.transform);
         // Удаляем человека из списка
         HumansManager.Instance.humansList.RemoveAt(0);
+        HumansManager.Instance.OneStepSteckHumans();
+        car.countPass++;
         // Устанавливаем таймер для следующей посадки
         timerToSeat = 0.2f;
-        HumansManager.Instance.OneStepSteckHumans();
 
 
         // Анимация перемещения человека в автомобиль
-        human.gameObject.transform.DOMove(car.transform.position, 0.8f).OnComplete(() =>
-        {
-            human.gameObject.SetActive(false);
-            OnHumanSeat?.Invoke(this, EventArgs.Empty);
+        human.SetFinalPos(car);
 
-            Vector3 v = car.transform.localScale;
-            car.transform.DOScale(v + new Vector3(0.2f, 0.2f, 0.2f), 0.1f).OnComplete(() =>
-            {
-                car.transform.DOScale(v, 0.1f);
-                // Проверяем, заполнен ли автомобиль
-                if (car.countPass == car.numberOfSeats)
-                {
-                    car.transform.SetParent(null);
-                    car.finalPosition = finalPos;
-                    OnHumanSeat?.Invoke(this, EventArgs.Empty);
-                }
-            });
-        });
         isCanSeat = true;
     }
 }

@@ -16,13 +16,13 @@ public class CarUI : MonoBehaviour
         audioSource = GetComponent<AudioSource>();
         car = GetComponent<Car>();
         imageProgress.fillAmount = 0f;
-        ParkingsStation.Instance.OnHumanSeat += ParkingsStation_OnHumanSeat;
     }
 
-    private void ParkingsStation_OnHumanSeat(object sender, EventArgs e)
+    public void HumanSeat()
     {
         imageProgress.fillAmount = (float)car.countPass / (float)car.numberOfSeats;
         audioSource.clip = clickSound;
+        audioSource.volume = 0.3f;
         audioSource.Play();
     }
 
@@ -36,10 +36,5 @@ public class CarUI : MonoBehaviour
     {
         audioSource.clip = crashSound;
         audioSource.Play();
-    }
-
-    private void OnDestroy()
-    {
-           ParkingsStation.Instance.OnHumanSeat -= ParkingsStation_OnHumanSeat;     
     }
 }

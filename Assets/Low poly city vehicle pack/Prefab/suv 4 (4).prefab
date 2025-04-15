@@ -277,6 +277,7 @@ Transform:
   m_LocalScale: {x: 0.66, y: 0.66, z: 0.66}
   m_ConstrainProportionsScale: 1
   m_Children:
+  - {fileID: 7857888220546051976}
   - {fileID: 8717383607796703774}
   - {fileID: 8737865954222041854}
   - {fileID: 777073803283820419}
@@ -348,6 +349,7 @@ MonoBehaviour:
   isReturn: 0
   isRemoved: 0
   isActive: 0
+  isParked: 0
 --- !u!54 &7382925156809331181
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -695,6 +697,37 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!1 &6460247799542946364
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7857888220546051976}
+  m_Layer: 0
+  m_Name: Passagirs
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7857888220546051976
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6460247799542946364}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0.7071068, z: -0, w: 0.7071068}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1.1515154, y: 1.1515151, z: 1.1515154}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2542935937415077828}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6665261652583636793
 GameObject:
   m_ObjectHideFlags: 0

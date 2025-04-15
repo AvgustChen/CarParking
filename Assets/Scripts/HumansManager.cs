@@ -26,7 +26,7 @@ public class HumansManager : MonoBehaviour
                 }
             }
         }
-        ShuffleHumans(humansList);
+        //ShuffleHumans(humansList);
         SteckHumans();
     }
 

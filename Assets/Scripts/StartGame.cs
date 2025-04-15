@@ -15,10 +15,10 @@ public class StartGame : MonoBehaviour
     {
         Instance = this;
         peopleCount.text = HumansManager.Instance.humansList.Count.ToString();
-        ParkingsStation.Instance.OnHumanSeat += ParkingsStation_OnHumanSeat;
+
     }
 
-    private void ParkingsStation_OnHumanSeat(object sender, EventArgs e)
+    public void HumanSeat()
     {
         peopleCount.text = HumansManager.Instance.humansList.Count.ToString();
         

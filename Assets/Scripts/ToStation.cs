@@ -18,7 +18,7 @@ public class ToStation : MonoBehaviour
 
                     other.transform.SetParent(parking.transform);
                     other.gameObject.transform.LookAt(new Vector3(transform.position.x, 0, parking.transform.position.z));
-                    other.gameObject.transform.DOMove(new Vector3(transform.position.x, 0, parking.transform.position.z), 0.5f).OnComplete(() =>
+                    other.gameObject.transform.DOMove(new Vector3(transform.position.x, 0, parking.transform.position.z), 0.2f).OnComplete(() =>
                     {
                         other.gameObject.transform.DOMove(parking.transform.position, 0.2f).OnComplete(() =>
                         {
