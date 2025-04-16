@@ -5,7 +5,6 @@ using UnityEngine;
 
 public class Human : MonoBehaviour
 {
-    public event EventHandler OnHumanSeat;
     [SerializeField] private string color;
     private Vector3 finalPos;
     float finalSpeed = 15f;
@@ -25,7 +24,7 @@ public class Human : MonoBehaviour
             Move();
         if (car != null)
         {
-            if (Vector3.Distance(transform.position, finalPos) < 0.5 && finalPos != Vector3.zero)
+            if (Vector3.Distance(transform.position, car.transform.position) < 1 && finalPos != Vector3.zero)
             {
                 SeatInCar();
             }
@@ -63,15 +62,16 @@ public class Human : MonoBehaviour
     public void SeatInCar()
     {
         transform.SetParent(car.transform.GetChild(0));
-        Vector3 v = car.transform.localScale;
         car.GetComponent<CarUI>().HumanSeat();
-        car.transform.DOScale(v + new Vector3(0.2f, 0.2f, 0.2f), 0.2f).OnComplete(() =>
+        car.transform.DOScale(car.startScale + new Vector3(0.2f, 0.2f, 0.2f), 0.2f).OnComplete(() =>
         {
-            car.transform.DOScale(v, 0.2f).OnComplete(() =>
+            car.transform.DOScale(car.startScale, 0.2f).OnComplete(() =>
             {
-                StartGame.Instance.HumanSeat();
+                GameManager.Instance.HumanSeat();
                 if (car.transform.GetChild(0).childCount == car.numberOfSeats)
                 {
+                    if(car.GetParking() != null)
+                        car.RemoveCarFromParking();
                     car.transform.SetParent(null);
                     car.finalPosition = ParkingsStation.Instance.finalPos;
                 }

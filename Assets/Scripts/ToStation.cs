@@ -1,3 +1,4 @@
+using System.Linq;
 using DG.Tweening;
 using UnityEngine;
 
@@ -7,37 +8,33 @@ public class ToStation : MonoBehaviour
     {
         if (other.CompareTag("Car"))
         {
-            bool parked = false;
+            Car car = other.GetComponent<Car>();
 
-            // Проверяем все парковки
-            foreach (var parking in ParkingsStation.Instance.parkings)
+            // Проверяем, припаркован ли уже автомобиль
+            if (car.isParked) return;
+
+            Parking freeParking = ParkingsStation.Instance.parkings.FirstOrDefault(p => p.GetIsFree());
+
+            if (freeParking != null)
             {
-                // Если парковка свободна
-                if (parking.transform.childCount == 1)
+                car.AddCarToParking(freeParking);
+                car.isParked = true; // Обновляем состояние автомобиля
+                freeParking.SetIsFree(false); // Обновляем состояние парковки
+                other.transform.SetParent(freeParking.transform);
+                other.transform.LookAt(new Vector3(transform.position.x, 0, freeParking.transform.position.z));
+
+                // Перемещение автомобиля к парковке
+                other.transform.DOMove(new Vector3(transform.position.x, 0, freeParking.transform.position.z), 0.2f).OnComplete(() =>
                 {
-
-                    other.transform.SetParent(parking.transform);
-                    other.gameObject.transform.LookAt(new Vector3(transform.position.x, 0, parking.transform.position.z));
-                    other.gameObject.transform.DOMove(new Vector3(transform.position.x, 0, parking.transform.position.z), 0.2f).OnComplete(() =>
+                    other.transform.DOMove(freeParking.transform.position, 0.2f).OnComplete(() =>
                     {
-                        other.gameObject.transform.DOMove(parking.transform.position, 0.2f).OnComplete(() =>
-                        {
-                            other.GetComponent<Car>().isParked = true;
-                            other.GetComponent<Car>().SetFinalPos(parking.transform.position);
-                        });
+                        car.SetFinalPos(freeParking.transform.position);
                     });
-
-
-                    parked = true; // Устанавливаем флаг, что автомобиль припаркован
-
-                    break; // Прерываем цикл после успешной парковки
-                }
+                });
             }
-
-            // Если не удалось припарковать, выводим сообщение
-            if (!parked)
+            else
             {
-                Debug.Log("Нет свободных парковок.");
+                GameManager.Instance.LoseGame(); // Если нет свободных парковок
             }
         }
     }

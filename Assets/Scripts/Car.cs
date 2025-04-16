@@ -7,11 +7,12 @@ public class Car : MonoBehaviour
     private Rigidbody rb;
     [SerializeField] private float speed = 5f, finalSpeed = 15f, rotationSpeed = 50f;
 
-    public Vector3 finalPosition, startPosition;
+    public Vector3 finalPosition, startPosition, startScale;
     public int numberOfSeats, countPass;
 
     public bool isReturn, isRemoved, isActive, isParked;
-    CarUI carUI;
+    private CarUI carUI;
+    private Parking parking;
 
     private void Awake()
     {
@@ -20,9 +21,14 @@ public class Car : MonoBehaviour
         rb = GetComponent<Rigidbody>();
     }
 
+    private void Start()
+    {
+        startScale = transform.localScale;
+    }
+
     private void OnMouseDown()
     {
-        if (StartGame.isGameStarted)
+        if (GameManager.Instance.GetIsGameStarted())
         {
             CarsController.Instance.carSelectedList.Add(this);
             isActive = true;
@@ -47,10 +53,7 @@ public class Car : MonoBehaviour
             transform.position = Vector3.MoveTowards(transform.position, finalPosition, finalSpeed * Time.fixedDeltaTime);
 
             Vector3 lookAtPos = finalPosition - transform.position;
-            // if (lookAtPos == Vector3.zero && isParked) 
-            // finalPosition = 
            transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(lookAtPos), rotationSpeed * Time.deltaTime);
-           //transform.forward = Vector3.Slerp(transform.forward, finalPosition, Time.deltaTime * rotationSpeed);
         }
     }
 
@@ -71,6 +74,17 @@ public class Car : MonoBehaviour
     private void CarDestroy()
     {
         Destroy(gameObject);
+    }
+
+    public void RemoveCarFromParking()
+    {
+        parking.SetIsFree(true);
+        parking = null;
+    }
+
+    public void AddCarToParking(Parking parking)
+    {
+        this.parking = parking;
     }
 
 
@@ -107,5 +121,10 @@ public class Car : MonoBehaviour
     public string GetColor()
     {
         return color;
+    }
+
+    public Parking GetParking()
+    {
+        return parking;
     }
 }

@@ -4,9 +4,8 @@ using UnityEngine;
 
 public class ParkingsStation : MonoBehaviour
 {
-    public event EventHandler OnHumanSeat;
     public static ParkingsStation Instance;
-    public Transform[] parkings;
+    public Parking[] parkings;
     public Vector3 finalPos;
     public bool isCanSeat;
     private float timerToSeat;
@@ -24,11 +23,11 @@ public class ParkingsStation : MonoBehaviour
         // Проверяем, можно ли садиться в автомобиль, и таймер истек
         if (isCanSeat && timerToSeat <= 0)
         {
-            foreach (Transform parking in parkings)
+            foreach (Parking parking in parkings)
             {
-                if (parking.childCount > 1 && HumansManager.Instance.humansList.Count > 0)
+                if (!parking.GetIsFree() && HumansManager.Instance.humansList.Count > 0)
                 {
-                    Car car = parking.GetChild(1).GetComponent<Car>();
+                    Car car = parking.transform.GetChild(1).GetComponent<Car>();
                     Human human = HumansManager.Instance.humansList[0].GetComponent<Human>();
                     // Проверяем, подходит ли человек для посадки
                     if (car.GetColor() == human.GetColor() && car.isParked && car.countPass < car.numberOfSeats)
@@ -44,16 +43,12 @@ public class ParkingsStation : MonoBehaviour
     private void SeatHumanInCar(Human human, Car car)
     {
         isCanSeat = false; // Запретить посадку до завершения текущей
-        //human.gameObject.transform.LookAt(car.transform.position);
-        //human.transform.SetParent(car.transform);
         // Удаляем человека из списка
         HumansManager.Instance.humansList.RemoveAt(0);
         HumansManager.Instance.OneStepSteckHumans();
         car.countPass++;
         // Устанавливаем таймер для следующей посадки
         timerToSeat = 0.2f;
-
-
         // Анимация перемещения человека в автомобиль
         human.SetFinalPos(car);
 

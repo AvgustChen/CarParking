@@ -9,9 +9,13 @@ public class HumansManager : MonoBehaviour
     [SerializeField] private List<Human> humansType;
     [SerializeField] private Transform steckPoint;
 
-    private void Start()
+    private void Awake()
     {
         Instance = this;
+    }
+
+    public void CreateHumans()
+    {
         foreach (Car car in CarsController.Instance.carsList)
         {
             for (int i = 0; i < car.numberOfSeats; i++)
@@ -26,7 +30,7 @@ public class HumansManager : MonoBehaviour
                 }
             }
         }
-        //ShuffleHumans(humansList);
+        ShuffleHumans(humansList);
         SteckHumans();
     }
 
@@ -56,8 +60,6 @@ public class HumansManager : MonoBehaviour
         float offset = 1.5f;
         foreach (Human human in humansList)
         {
-            //human.transform.position += new Vector3(offset, 0, 0);
-
             human.transform.DOMoveX(human.transform.position.x + offset, 0.1f);
         }
     }

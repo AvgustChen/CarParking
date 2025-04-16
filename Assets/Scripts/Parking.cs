@@ -8,4 +8,14 @@ public class Parking : MonoBehaviour
     {
         isFree = true;
     }
+
+    public bool GetIsFree()
+    {
+        return isFree;
+    }
+
+    public void SetIsFree(bool value)
+    {
+        isFree = value;
+    }
 }

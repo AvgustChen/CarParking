@@ -11,15 +11,13 @@ public class CarsController : MonoBehaviour
     {
         Instance = this;
         carSelectedList = new List<Car>();
-        carsList = new List<Car>(FindObjectsOfType<Car>());
     }
 
     private void Update()
     {
-        if (carsList.Count == 0)
+        if (carsList.Count == 0 && GameManager.Instance.GetIsGameStarted())
         {
-            // вызов события победы
-            Debug.Log("You win");
+            GameManager.Instance.WinGame();
         }
     }
 
@@ -41,5 +39,10 @@ public class CarsController : MonoBehaviour
                 return false; // Не удаляем
             });
         }
+    }
+
+    public void FindCarsInLevel()
+    {
+        carsList = new List<Car>(FindObjectsByType<Car>(FindObjectsSortMode.None));
     }
 }
