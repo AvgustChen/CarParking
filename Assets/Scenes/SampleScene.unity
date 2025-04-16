@@ -3950,6 +3950,7 @@ MonoBehaviour:
   - {fileID: 256521367572839283, guid: 1c06ff46438634645ba672c77cb21171, type: 3}
   - {fileID: 7145027113279833344, guid: 8f0d04744969f6e4796e63f133dc6e28, type: 3}
   - {fileID: 7388654184457920987, guid: 6b491eed9af34a3418d37a197162aa46, type: 3}
+  - {fileID: 7388654184457920987, guid: 79df9279164a36f4ba5741a1e0547721, type: 3}
   steckPoint: {fileID: 727441425}
 --- !u!1 &875745412
 GameObject:
@@ -4514,6 +4515,7 @@ MonoBehaviour:
   - {fileID: 883121189863880168, guid: 387124146d5800f4283ac7a6064f44a3, type: 3}
   - {fileID: 883121189863880168, guid: 9778cb64c3a7897498873f6d519c5ad8, type: 3}
   - {fileID: 883121189863880168, guid: 21eb7f9fe0bbfbd4487d682f9b27af50, type: 3}
+  - {fileID: 883121189863880168, guid: 661b6d2f55ea1344381a1a30fd23e785, type: 3}
   levelLoadPoint: {fileID: 2005197240}
 --- !u!114 &949035513
 MonoBehaviour:
